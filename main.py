@@ -1,20 +1,22 @@
 #Declaración que se debe realizar en todos los programas de python 
 #el id es la direccion en donde lAS Cvariables o caracteres viven o reposan en la memoria del compurador 
-#en las listas, para copiar un alista es mejor user el módulo copy (import copy) y evitar problemas al alterar la lista original pero no queremos uqe la copoia cambie 
+#en las listas, para copiar un alista es mejor usar el módulo copy (import copy) y evitar problemas al alterar la lista original pero no queremos uqe la copoia cambie 
 #los strings no se dejan cambian remplazando su indice (string[0]=x esto me genera un error)
 # la funcion get para diccionarois no spermite manejar los erroeros para evitarlos (ficcionarios.get/('valor a buscar', 'valor por defecto '))
 import random #para manejar nuomeros aleatrorios, se usa por ejemolo s.append(random.randint(0,15))
 import sys
 #clients='javier,ricardo,'primera manera de realizar en ejercicio
-clients=['javier','ricardo,']
+#clients=['javier','ricardo,'] clientes en forma de listas
+clients=[{'name':'javier','company':'street','position':'learner',},
+		{'name':'ricardo','company':'park','position':'engineer',}]
 
 #
 
-def create_client(client_name):
+def create_client(client):
 	global clients #nos permite trabajar o traer una variable global
-	if client_name not in clients:
+	if client not in clients:
 		#clients +=client_name se concatenava para strings 
-		clients.append(client_name)
+		clients.append(client)
 		#_add_comma() #forma de modificar el flujo de trabajo
 	else:
 		print ('client alrady exist in historial')
@@ -39,7 +41,11 @@ def list_clients():
 	global clients
 	#print (clients)
 	for idx, client in enumerate(clients):#enumerate m emuestra la el indice y la variable 
-		print ('{}: {}'.format(idx,client))
+		#print ('{}: {}'.format(idx,client['name']))
+		print ('{uid} | {name} | {company} | {position}'.format(uid=idx,
+													  name=client['name'],
+													  company=client['company'],
+													  position=client['position']))
 
 
 def _get_name():
@@ -54,13 +60,29 @@ def _get_name():
 	return client_name
 
 
-def delete_client(client_name):
+def _get_client_field(field_name):
+	field=None
+	while not field:
+		field= input ('what is the client {}?'.format(field_name))
+		return field
+
+
+
+def delete_client(client_id):
 	global clients
-	if client_name in clients:
+	"""if client_name in clients['name']:
+		client=clients[]
 		#clients=clientes.replace(client_name+',','')
 		clients.remove(client_name)
 	else:
-		print('cliente existente ')
+		print('cliente existente ')"""
+	for name,client in enumerate(clients):
+		#print ('nombre {} cliente {}'.format(name))
+		if name==client_id:
+			del clients[name]
+			break
+
+
 
 
 def search(client_name):
@@ -93,12 +115,18 @@ if __name__=='__main__':
 	if orden =='C':
 		print ('estos son los clientes iniciales: ')
 		list_clients()
-		client_name=_get_name()
-		create_client(client_name)
+		#client_name=_get_name() pregunta por el nombre del cliente 
+		client={
+			'name':_get_client_field('name'),#se debe refactorizar la función
+			'company':_get_client_field('company'),
+			'position':_get_client_field('position'),
+
+		}
+		create_client(client)
 		list_clients()
 	elif orden=='D':
-		client_name=_get_name()
-		delete_client(client_name)
+		client_id=int (_get_client_field('igd'))
+		delete_client(client_id)
 		list_clients()
 
 	elif orden=='L':
